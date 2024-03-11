@@ -36,7 +36,7 @@ shoe_list = []
 #   or raise appropriate error message should file not be found.
 def read_shoes_data():
     try:
-        with open("L1_caps/inventory.txt", "r") as file_contents:
+        with open("app/data/inventory.txt", "r") as file_contents:
             file = file_contents.readlines()[1:]
             for line in file:
                 temp = line.strip().split(",")
@@ -64,7 +64,7 @@ def capture_shoes():
                     return
             else:
                 shoe_list.append(Shoe(new_country, new_code, new_prod_name, new_cost, new_quantity))
-                with open("L1_caps/inventory.txt", "a") as add_shoe:
+                with open("app/data/inventory.txt", "a") as add_shoe:
                     add_shoe.write(f'''\n{new_country},{new_code},{new_prod_name},{new_cost},{new_quantity}''')
                 print("Inventory updated successfully.\n")
                 break
@@ -104,7 +104,7 @@ def re_stock():
 
     # read through file and store data in a list (new_data) to be manipulated.
     new_data = []
-    with open("L1_caps/inventory.txt", "r") as r:
+    with open("app/data/inventory.txt", "r") as r:
         data = r.readlines()
         for line in data:
             temp = line.strip().split(",")
@@ -123,7 +123,7 @@ def re_stock():
             if restock_option == 1:
                 new_quantity = lowest_stock * 2
                 new_data[count][-1] = str(new_quantity)
-                with open("L1_caps/inventory.txt", "w") as new:
+                with open("app/data/inventory.txt", "w") as new:
                     for row in new_data:
                         new.write(",".join([str(item) for item in row]) + "\n")
                 print("Inventory updated successfully.\n")
@@ -134,7 +134,7 @@ def re_stock():
                 new_quantity = lowest_stock + add_quantity
                 new_data[count][-1] = str(new_quantity)
                 try:
-                    with open("L1_caps/inventory.txt", "w") as new:
+                    with open("app/data/inventory.txt", "w") as new:
                         for row in new_data:
                             new.write(",".join([str(item) for item in row]) + "\n")
                     print("Inventory updated successfully.\n")
@@ -205,14 +205,14 @@ def highest_qty():
 
 
 #==========Main Menu=============
-
-print("Welcome to Nike World's Stock Management System!\n")
-menu = ""
-print()
-read_shoes_data()
-while menu != "e":
-    print("----------Main Menu----------")
-    menu = input('''Please enter your choice from the menu below:
+def main():
+    print("Welcome to Nike World's Stock Management System!\n")
+    menu = ""
+    print()
+    read_shoes_data()
+    while menu != "e":
+        print("----------Main Menu----------")
+        menu = input('''Please enter your choice from the menu below:
 's' - Search for a shoe model in stock by typing its product code.
 'va' - View information on all the shoe models in stock.
 'c' - Capture and save a new stock item to inventory.
@@ -220,23 +220,28 @@ while menu != "e":
 'h' - View the item with the highest quantity and the current special on that item.
 't' - View the total stock value for each item.
 'e' - Exit. \n''').lower()
-    if menu == "s":
-        search_shoe()
+        if menu == "s":
+            search_shoe()
 
-    elif menu == "va":
-        view_all()
+        elif menu == "va":
+            view_all()
 
-    elif menu == "c":
-        capture_shoes()
+        elif menu == "c":
+            capture_shoes()
 
-    elif menu == "r":
-        re_stock()
+        elif menu == "r":
+            re_stock()
 
-    elif menu == "h":
-        highest_qty()
+        elif menu == "h":
+            highest_qty()
 
-    elif menu == "t":
-        value_per_item()
+        elif menu == "t":
+            value_per_item()
 
-    else:
-        print("Unrecognized selection. Try again.")
+        else:
+            print("Unrecognized selection. Try again.")
+        
+    
+
+if __name__ == "__main__":
+    main()
